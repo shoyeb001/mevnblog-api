@@ -7,11 +7,6 @@ const PostSchema = new mongoose.Schema({
     content:{type:String, required:true},
     user_id:{type:String, required:true},
     tags:{type:[String], required:true, indexd:true},
-    comment:{type:[{
-        commenter_id: {type:String},
-        date:{type: Date, default: Date.now },
-        content:{type:String}
-    }]},
 },{timestamps:true});
 
 export default mongoose.model("Post",PostSchema);

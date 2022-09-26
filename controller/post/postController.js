@@ -131,6 +131,16 @@ const postController = {
             next(error);
            }    
         })
+    },
+
+    async viewArticleByUser(req,res,next){
+        const user_id = req.params.id;
+        try {
+            const articles = await PostSchema.find({user_id});
+            return res.status(200).json(articles);
+        } catch (error) {
+            next(error);
+        }
     }
 
 }
