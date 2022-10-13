@@ -2,25 +2,28 @@ import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config/index.js';
 
 const verifyfunction = (req,res,next)=>{
-    const acc_token = req.cookies.access_token;
-    if(!acc_token){
-        return res.json({msg:"Access token not defined"});
+    const acc_token = req.headers.authorization;
+    if(acc_token){
+        const token = acc_token.split(" ")[1];
+        jwt.verify(token, JWT_SECRET, function(err, user) {
+            if (err) {
+                return res.json({msg:"Token is invalid"});
+            }
+    
+            req.user = user;
+            next();
+        });
+    }else{
+        return res.json({msg:"User unauthorized"});
     }
 
-    jwt.verify(acc_token, JWT_SECRET, function(err, user) {
-        if (err) {
-            return res.json({msg:"Token is invalid"});
-        }
-
-        req.user = user;
-        next();
-    });
+  
 
 }
 
 const verifyuser = (req,res,next)=>{
     verifyfunction(req,res,()=>{
-        if (req.user.id === req.params.id || req.params.isAdmin) {
+        if (req.user.id === req.params.id || req.params.isadmin) {
             next();
         }
         else{
@@ -31,7 +34,7 @@ const verifyuser = (req,res,next)=>{
 
 const verifyadmin = (req,res,next)=>{
     verifyfunction(req,res,()=>{
-        if (req.user.isAdmin) {
+        if (req.user.isadmin) {
             next();
         }
         else{

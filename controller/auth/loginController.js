@@ -8,11 +8,11 @@ const loginController = {
         try {
             const isExit = await UserSchema.findOne({email:req.body.email});
             if (!isExit) {
-               return res.status(501).json({msg:"User is not authorized"});
+               return res.status(401).json({msg:"User is not authorized"});
             }
             const validatePass = bcrypt.compareSync(req.body.password, isExit.password);
             if(!validatePass){
-                return res.status(501).json({msg:"user is not authorized"});
+                return res.status(401).json({msg:"user is not authorized"});
             }
 
             var token = jwt.sign({ 
@@ -22,7 +22,8 @@ const loginController = {
 
             const {password,isadmin,__v, ...others} = isExit._doc;
 
-            return res.cookie("access_token",token,{httpOnly:true}).status(201).json(others);
+            // return res.cookie("access_token",token,{httpOnly:true}).status(201).json(others);
+            res.status(201).json({access_token:token});
 
         } catch (error) {
             next(error);

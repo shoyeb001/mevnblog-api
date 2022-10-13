@@ -63,6 +63,15 @@ const postController = {
        }
     },
 
+    async RecentArticle(req,res,next){
+        try {
+            const article = await PostSchema.find().sort({_id:-1}).limit(5);
+            return res.status(200).json(article);
+        } catch (error) {
+            next(error);
+        }
+    },
+
     async viewArticleId(req,res,next){
         const id = req.params.id;
 

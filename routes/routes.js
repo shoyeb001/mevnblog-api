@@ -18,18 +18,19 @@ routes.post("/user/login", loginController.login);
 //user routes
 
 routes.get("/user/view", verifyadmin, userController.viewUsers);
-routes.get("/user/view/:id", userController.viewUserById);
-routes.post("/user/update/:id", userController.updateUser);
-routes.delete("/user/delete/:id",userController.deleteUser);
+routes.get("/user/view/:id",verifyuser, userController.viewUserById);
+routes.post("/user/update/:id",verifyuser, userController.updateUser);
+routes.delete("/user/delete/:id",verifyuser, userController.deleteUser);
 
 //post routes
 
 routes.post("/post/add/:id",postController.addPost);
-routes.get("/post/view/:isAdmin", verifyadmin, postController.viewArticle);
+routes.get("/post/view", postController.viewArticle);
 routes.get("/post/view/:id",postController.viewArticleId);
-routes.put("/post/update/:id",postController.updatePost);
-routes.delete("/post/delete/:id",postController.deletePost);
-routes.get("/post/view/user/:id",postController.viewArticleByUser);
+routes.put("/post/update/:id",verifyuser, postController.updatePost);
+routes.delete("/post/delete/:id",verifyuser, postController.deletePost);
+routes.get("/post/view/user/:id",verifyuser, postController.viewArticleByUser);
+routes.get("/post/recent",postController.RecentArticle);
 
 //comment
 

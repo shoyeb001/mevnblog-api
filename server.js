@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: false})); // used for understand img
 
 app.use(express.json());
 app.use(routes);
+app.use(express.static(__dirname));
 
 app.listen(PORT, 
     async ()=>{
