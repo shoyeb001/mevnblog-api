@@ -5,9 +5,8 @@ import path from "path";
 
 const commentController = {
     async addComment(req,res,next){
-        const post_id = req.params.id;
 
-        const {user_id, comment}  = req.body;
+        const {post_id, user_id, comment}  = req.body;
 
         try {
             const comments = new CommentScema({
@@ -17,7 +16,7 @@ const commentController = {
             });
 
             const newcomment  = await comments.save();
-            res.status(200).json({msg:"Comment posted Successfully"});
+            res.status(200).json({msg:"Comment posted Successfully."});
         } catch (error) {
             next(error);
         }
@@ -42,10 +41,20 @@ const commentController = {
         }
     },
 
+    // async approveComment(req,res,next){
+    //     const id = req.params.id;
+    //     try {
+    //         await CommentScema.findByIdAndUpdate({_id:id},{status:"approved"},{new:true});
+    //         res.status(200).json({msg:"Comment Approved"});
+    //     } catch (error) {
+    //         next(error);
+    //     }
+    // },
+
     async viewCommentByPost(req,res,next){
         const post_id = req.params.id;
         try {
-            const comments = await CommentScema.find({post_id});
+            const comments = await CommentScema.find({post_id}).sort({updatedAt:'desc'});
             res.status(200).json(comments);
         } catch (error) {
             next(error);

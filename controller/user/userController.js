@@ -1,4 +1,7 @@
 import UserSchema from "../../model/UserModel";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../../config";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -50,12 +53,13 @@ const userController = {
 
             const {name,email,about} = req.body;
             let filepath;
-
+            
             if (req.file) {
                 const data = await UserSchema.findById({_id:id});
                 fs.unlink(`${appRoot}/${data.image}`,(error)=>{
                     console.log("image deleted");
                 });
+                filepath = req.file.path;
             }
 
             try {
@@ -75,6 +79,33 @@ const userController = {
             }
             
         })
+    },
+
+    async updatePassword(req,res,next){
+        const id = req.params.id;
+
+        const {oldpassword, newpassword} = req.body;
+
+        try {
+            const user = await UserSchema.findById({_id:id});
+            const validatePass = bcrypt.compareSync(oldpassword, user.password);
+            if (!validatePass) {
+                res.status(401).json({msg:"Invalid Password"});
+            }
+            const salt = bcrypt.genSaltSync(10);
+            const hashpassword = bcrypt.hashSync(newpassword, salt);
+
+            const update = await UserSchema.findByIdAndUpdate(
+                {_id:id},
+                {
+                   password:hashpassword,
+                },
+                {new:true}
+            );
+            res.status(200).json({msg:"User updated Successfully"});
+        } catch (error) {
+            next(error);
+        }
     },
 
     deleteUser(req,res,next){

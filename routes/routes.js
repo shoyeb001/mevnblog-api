@@ -18,9 +18,10 @@ routes.post("/user/login", loginController.login);
 //user routes
 
 routes.get("/user/view", verifyadmin, userController.viewUsers);
-routes.get("/user/view/:id",verifyuser, userController.viewUserById);
-routes.post("/user/update/:id",verifyuser, userController.updateUser);
+routes.get("/user/view/:id", userController.viewUserById);
+routes.put("/user/update/:id",verifyuser, userController.updateUser);
 routes.delete("/user/delete/:id",verifyuser, userController.deleteUser);
+routes.put("/user/update/password/:id",userController.updatePassword);
 
 //post routes
 
@@ -34,9 +35,10 @@ routes.get("/post/recent",postController.RecentArticle);
 
 //comment
 
-routes.post("/comment/add/:id",commentController.addComment);
+routes.post("/comment/add/:id",verifyuser, commentController.addComment);
 routes.get("/comment/view/:id",commentController.viewCommentByPost);
 routes.get("/comment/view",commentController.viewAllComment);
+// routes.put("/comment/approve/:id",commentController.approveComment);
 routes.delete("/comment/delete/:id",commentController.deleteComment);
 
 export default routes;

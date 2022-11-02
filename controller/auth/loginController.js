@@ -10,7 +10,9 @@ const loginController = {
             if (!isExit) {
                return res.status(401).json({msg:"User is not authorized"});
             }
+            
             const validatePass = bcrypt.compareSync(req.body.password, isExit.password);
+            
             if(!validatePass){
                 return res.status(401).json({msg:"user is not authorized"});
             }
@@ -23,7 +25,7 @@ const loginController = {
             const {password,isadmin,__v, ...others} = isExit._doc;
 
             // return res.cookie("access_token",token,{httpOnly:true}).status(201).json(others);
-            res.status(201).json({access_token:token});
+            res.status(201).json({access_token:token, id:others._id});
 
         } catch (error) {
             next(error);

@@ -5,19 +5,16 @@ const verifyfunction = (req,res,next)=>{
     const acc_token = req.headers.authorization;
     if(acc_token){
         const token = acc_token.split(" ")[1];
-        jwt.verify(token, JWT_SECRET, function(err, user) {
+        jwt.verify(token, JWT_SECRET, function(err,user) {
             if (err) {
                 return res.json({msg:"Token is invalid"});
             }
-    
             req.user = user;
             next();
         });
     }else{
         return res.json({msg:"User unauthorized"});
     }
-
-  
 
 }
 
@@ -29,7 +26,7 @@ const verifyuser = (req,res,next)=>{
         else{
             return res.json({msg:"User is unauthorized"});
         }
-    })
+    });
 }
 
 const verifyadmin = (req,res,next)=>{
