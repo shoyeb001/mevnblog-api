@@ -153,6 +153,16 @@ const postController = {
       next(error);
     }
   },
+
+  async searchPost(req,res,next){
+    const post = new RegExp(req.params.name,'i');
+    try {
+      const result = await PostSchema.find({title:post});
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error)
+    }
+  }
 };
 
 export default postController;

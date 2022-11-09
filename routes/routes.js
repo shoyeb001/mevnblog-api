@@ -41,4 +41,8 @@ routes.get("/comment/view",commentController.viewAllComment);
 // routes.put("/comment/approve/:id",commentController.approveComment);
 routes.delete("/comment/delete/:id",commentController.deleteComment);
 
+//search post
+
+routes.get("/post/search/:name",postController.searchPost);
+
 export default routes;
