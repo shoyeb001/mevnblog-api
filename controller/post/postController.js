@@ -30,6 +30,7 @@ const postController = {
       const user_id = req.params.id;
 
       const { title, description, content, tags } = req.body;
+      console.log(req.body);
 
       if (!req.file) {
         return res.status(501).json({ msg: "Thumbnail is required" });
@@ -40,7 +41,7 @@ const postController = {
         const data = new PostSchema({
           title,
           description,
-          thumbnail,
+         thumbnail,
           content,
           user_id,
           tags,
